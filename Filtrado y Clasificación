@@ -1,0 +1,28 @@
+## FILTRADO Y CLASIFICACION ##
+# Filtrar filas con enzima y secuencia
+df_seq = df_filtered[(df_filtered['Enzyme'].notna()) & (df_filtered['Sequence'].notna())].copy()
+
+# Rellenar NA en ambiente y temperatura
+df_seq.loc[:, 'Environment'] = df_seq['Isolation environment'].fillna('Unknown')
+df_seq.loc[:, 'Temperature'] = df_seq['Thermophilic conditions'].fillna('Unknown')
+
+# Guardar archivo filtrado con secuencias
+ruta_guardado_seq = r'D:\Mis documentos\Documentos\MAESTRIA\TFM\dataset_filtrado_seq.xlsx'
+df_seq.to_excel(ruta_guardado_seq, index=False)
+print(f"Archivo con secuencias guardado en: {ruta_guardado_seq}")
+
+
+## FORMATO FASTA DE LAS SECUENCIAS ##
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio import SeqIO
+
+records = []
+for _, row in df_seq.iterrows():
+    fasta_id = f"{row['Microorganism']}|{row['Enzyme']}|{row['Plastic']}".replace(" ", "_")
+    seq_record = SeqRecord(Seq(row['Sequence']), id=fasta_id, description="")
+    records.append(seq_record)
+
+ruta_fasta = ruta_guardado_seq.replace('.xlsx', '.fasta')
+SeqIO.write(records, ruta_fasta, "fasta")
+print(f"Archivo FASTA guardado en: {ruta_fasta}")
