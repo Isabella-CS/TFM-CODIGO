@@ -1,0 +1,89 @@
+# Instalar y cargar librerías necesarias
+if (!require("vegan")) install.packages("vegan", dependencies = TRUE)
+if (!require("readxl")) install.packages("readxl", dependencies = TRUE)
+if (!require("ggplot2")) install.packages("ggplot2")
+if (!require("dplyr")) install.packages("dplyr")
+
+library(vegan)
+library(readxl)
+library(ggplot2)
+library(dplyr)
+
+# Leer el archivo desde Excel
+ruta_archivo <- "D:/Mis documentos/Documentos/MAESTRIA/TFM/dataset_filtrado.xlsx"
+datos <- read_excel(ruta_archivo)
+
+# Verifica nombres de columnas 
+head(datos)
+
+
+# Crear matriz de abundancia: filas = tipos de plástico, columnas = microorganismos
+abundancia_plastico <- table(datos$Plastic, datos$Microorganism)
+abundancia_plastico <- as.matrix(abundancia_plastico)
+
+# Calcular diversidad alfa (Shannon) por tipo de plástico
+shannon <- diversity(abundancia_plastico, index = "shannon")
+
+# Convertir en dataframe para graficar
+shannon_df <- data.frame(
+  Plastic = names(shannon),
+  Shannon_Diversity = shannon
+)
+
+# Graficar índice de Shannon por tipo de plástico
+ggplot(shannon_df, aes(x = Plastic, y = Shannon_Diversity, fill = Plastic)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  theme_minimal() +
+  labs(title = "Diversidad Alfa - Índice de Shannon por Tipo de Plástico",
+       x = "Tipo de Plástico", y = "Índice de Shannon") +
+  scale_fill_brewer(palette = "Set2") +
+  theme(legend.position = "none")
+
+
+# ---- BETA DIVERSIDAD ----
+
+# Tabla de abundancia: microorganismos vs tipo de plástico
+abund_matrix <- table(datos$Microorganism, datos$Plastic)
+abund_matrix <- as.matrix(abund_matrix)
+
+# Calcular distancias Bray-Curtis
+bray_dist <- vegdist(abund_matrix, method = "bray")
+
+# MDS clásico
+ordination <- cmdscale(bray_dist)
+
+# Crear data frame con coordenadas del MDS
+ordination_df <- as.data.frame(ordination)
+ordination_df$Microorganism <- rownames(ordination_df)
+
+# Obtener tipo de plástico más frecuente por microorganismo (incluye PE y PVC)
+info_plastico <- datos %>%
+  group_by(Microorganism, Plastic) %>%
+  tally() %>%
+  slice_max(n, n = 1, with_ties = FALSE) %>%  # Elegir el más frecuente
+  ungroup()
+
+# Verificar que PE y PVC estén presentes
+print(unique(info_plastico$Plastic))  # <- PE y PVC deben aparecer
+
+# Unir la información del plástico
+ordination_df <- left_join(ordination_df, info_plastico, by = "Microorganism")
+
+# Verificar que todos los microorganismos tienen asignado un plástico
+stopifnot(all(!is.na(ordination_df$Plastic)))
+
+# Graficar el MDS con colores por plástico y etiquetas sin solapamiento
+ggplot(ordination_df, aes(x = V1, y = V2, color = Plastic)) +
+  geom_point(size = 3) +
+  geom_text_repel(aes(label = Microorganism),
+                  size = 3,   
+                  box.padding = 0.6,
+                  point.padding = 0.6,
+                  segment.color = 'grey50',
+                  max.overlaps = Inf) +
+  labs(title = "Diversidad Beta - MDS (Bray-Curtis)",
+       x = "Dim 1", y = "Dim 2") +
+  theme_minimal() +
+  scale_color_brewer(palette = "Set1")
+
+ggsave("mds_plastico.png", width = 14, height = 10, dpi = 300)
