@@ -1,0 +1,67 @@
+import pandas as pd
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy.cluster.hierarchy import linkage, dendrogram
+import pandas as pd
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy.cluster.hierarchy import linkage, dendrogram
+from sklearn.manifold import TSNE
+
+
+# CONFIGURAR VARIABLES Y DATOS
+
+features = ['Temperature', 'Environment']  # Añade más si tienes
+group_col = 'Enzyme'                       # O 'Group', según tu variable
+name_col = 'Microorganism'
+
+# Verificar columnas
+assert all(col in df_seq.columns for col in features + [group_col, name_col])
+
+# Codificar variables categóricas
+encoded = pd.get_dummies(df_seq[features])
+
+# Escalar
+scaler = StandardScaler()
+scaled = scaler.fit_transform(encoded)
+
+
+# Clustering jerárquico 
+plt.figure(figsize=(16, 8))
+linked = linkage(scaled, method='ward')
+
+dendrogram(
+    linked,
+    labels=df_seq.apply(lambda x: f"{x[name_col]}\n({x['Enzyme']}, {x['Environment']})", axis=1).values,
+    leaf_rotation=90,
+    leaf_font_size=9,
+    orientation='top',
+    color_threshold=0.7*max(linked[:,2]),
+    above_threshold_color='grey'
+)
+
+plt.title('Clustering Jerárquico: Relación entre Microorganismos por\nAmbiente de Aislamiento y Tipo Enzimático', pad=20)
+plt.xlabel('Microorganismos (Enzima, Ambiente)')
+plt.ylabel('Distancia')
+plt.axhline(y=0.7*max(linked[:,2]), color='r', linestyle='--', label='Umbral de corte')
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+# Distribución de enzimas por ambiente
+env_enz_counts = df_seq.groupby(['Environment', 'Enzyme']).size().unstack().fillna(0)
+
+plt.figure(figsize=(12, 6))
+env_enz_counts.plot(kind='bar', stacked=True, colormap='viridis', edgecolor='black')
+plt.title('Distribución de Enzimas por Ambiente de Aislamiento', pad=20)
+plt.ylabel('Número de Microorganismos')
+plt.xlabel('Ambiente de Aislamiento')
+plt.xticks(rotation=45, ha='right')
+plt.legend(title='Tipo de Enzima', bbox_to_anchor=(1.05, 1), loc='upper left')
+plt.grid(axis='y', alpha=0.3)
+plt.tight_layout()
+plt.show()
