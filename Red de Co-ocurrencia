@@ -1,0 +1,40 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+
+# Crear grafo no dirigido
+G = nx.Graph()
+
+# Añadir nodos y enlaces: Microorganismo ↔ Enzima
+for _, row in df_filtered.iterrows():
+    microbe = row['Microorganism']
+    enzyme = row['Enzyme']
+    plastic = row['Plastic']
+    G.add_node(microbe, type='microbe')
+    G.add_node(enzyme, type='enzyme')
+    G.add_node(plastic, type='plastic')
+    G.add_edge(microbe, enzyme)
+    G.add_edge(microbe, plastic)
+    G.add_edge(enzyme, plastic)
+
+
+# Posición de los nodos usando layout
+pos = nx.spring_layout(G, k=0.3, iterations=50, seed=42)
+
+microbes = [n for n, d in G.nodes(data=True) if d['type'] == 'microbe']
+enzymes = [n for n, d in G.nodes(data=True) if d['type'] == 'enzyme']
+plastics = [n for n, d in G.nodes(data=True) if d['type'] == 'plastic']
+
+plt.figure(figsize=(16, 12))
+nx.draw_networkx_edges(G, pos, alpha=0.3)
+
+nx.draw_networkx_nodes(G, pos, nodelist=microbes, node_color='skyblue', label='Microorganism', node_size=600)
+nx.draw_networkx_nodes(G, pos, nodelist=enzymes, node_color='lightgreen', label='Enzyme', node_size=500)
+nx.draw_networkx_nodes(G, pos, nodelist=plastics, node_color='salmon', label='Plastic', node_size=700, node_shape='s')
+
+nx.draw_networkx_labels(G, pos, font_size=7)
+
+plt.title("Red de Co-ocurrencia: Microorganismo ↔ Enzima ↔ Plástico", fontsize=16)
+plt.axis('off')
+plt.legend(scatterpoints=1)
+plt.tight_layout()
+plt.show()
