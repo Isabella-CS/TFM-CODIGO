@@ -1,0 +1,27 @@
+##PREDICCIÓN
+library(randomForest)
+library(caret)
+library(ggplot2)
+install.packages("readxl")  # Solo la primera vez
+library(readxl)
+
+
+# Verificar columnas
+print(df)
+# Asegúrate de que Plastic sea factor
+df$Plastic <- as.factor(df$Plastic)
+
+# Dividir en train/test
+set.seed(42)
+trainIndex <- createDataPartition(df$Plastic, p = .8, list = FALSE)
+trainData <- df[trainIndex, ]
+testData <- df[-trainIndex, ]
+
+# Modelo
+rf <- randomForest(Plastic ~ Group + Microorganism, data = trainData, importance = TRUE)
+
+# Predicciones
+pred <- predict(rf, newdata = testData)
+
+# Matriz de confusión
+confusionMatrix(pred, testData$Plastic)
