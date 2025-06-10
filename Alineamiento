@@ -1,0 +1,40 @@
+##Alineamiento
+import subprocess
+from Bio import AlignIO, Phylo
+import os
+import matplotlib.pyplot as plt
+
+# Archivo fasta de secuencias ya guardado (usa el que tengas)
+fasta_input = r'D:\Mis documentos\Documentos\MAESTRIA\TFM\dataset_filtrado_seq.fasta'
+
+# Archivo de salida para alineamiento
+aligned_output = r'D:\Mis documentos\Documentos\MAESTRIA\TFM\aligned_sequences.aln'
+
+# Archivo para el árbol filogenético (Newick)
+tree_output = r'D:\Mis documentos\Documentos\MAESTRIA\TFM\phylo_tree.dnd'
+
+# Ruta a Clustal Omega 
+clustalo_path = r'D:\Mis documentos\Descargas\clustal\clustal-omega-1.2.2-win64\clustalo.exe'
+
+# Ejecutar Clustal Omega para alineamiento + construcción de árbol
+# Opciones: --outfmt=clu para alineamiento en formato Clustal; --guidetree-out para árbol Newick
+subprocess.run([
+    clustalo_path,
+    '-i', fasta_input,
+    '-o', aligned_output,
+    '--outfmt=clu',
+    '--guidetree-out', tree_output,
+    '--force'  # sobreescribir si existe
+])
+
+# Leer alineamiento
+alignment = AlignIO.read(aligned_output, 'clustal')
+
+# Leer árbol filogenético
+tree = Phylo.read(tree_output, 'newick')
+
+# Visualizar árbol
+plt.figure(figsize=(10, 15))
+Phylo.draw(tree)
+plt.title('Árbol filogenético generado con Clustal Omega')
+plt.show()
