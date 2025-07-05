@@ -1,49 +1,56 @@
-# Exploración bioinformática de genes y enzimas clave en la degradación de plásticos
+# TFM - Exploración bioinformática de genes y enzimas degradadores de plásticos
 
-Este repositorio contiene el código, scripts en R y python para el Trabajo Fin de Máster (TFM) titulado:
+Este repositorio contiene los scripts y análisis desarrollados para el **Trabajo Fin de Máster (TFM)** titulado:
 
-**“Exploración bioinformática de genes y enzimas claves en la degradación de PET, PE, PVC y PP por hongos y bacterias de la plastisfera”**, realizado en el marco del Máster Universitario en Bioinformática de la Universidad Internacional de La Rioja.
-
-Autores:  
-- Isabella Cañaveral Sánchez  
-- Laura Juliana Leal Lugo  
-Director: Marcos Lacasa Cascarra  
-Año: 2025
+**“Exploración bioinformática de genes y enzimas claves en la degradación de PET, PE, PVC y PP por hongos y bacterias de la plastisfera”**  
+Máster Universitario en Bioinformática – Universidad Internacional de La Rioja (UNIR)  
+ Año: 2025  
+ Autoras: Isabella Cañaveral Sánchez & Laura Juliana Leal Lugo  
+ Director: Marcos Lacasa Cascarra
 
 ---
 
-## Objetivo
+## Objetivo del proyecto
 
-Desarrollar un enfoque bioinformático integral para caracterizar genes y enzimas involucrados en la biodegradación de plásticos (PET, PE, PVC y PP) por microorganismos de la plastisfera, mediante:
+Aplicar herramientas bioinformáticas para:
 
-- Análisis metagenómico y filogenético
-- Evaluación funcional y ecológica
-- Visualización de redes de co-ocurrencia
-- Modelado predictivo de capacidad degradativa
+- Identificar genes y enzimas implicadas en la degradación de plásticos sintéticos (PET, PE, PVC, PP)
+- Evaluar la diversidad microbiana y sus condiciones ecológicas
+- Analizar redes funcionales y de co-ocurrencia entre microorganismos, enzimas y tipos de plásticos
+- Construir modelos predictivos de capacidad degradativa usando aprendizaje automático
 
 ---
 
 ## Estructura del repositorio
 
-Cada carpeta contiene scripts, datos de entrada/salida y documentación asociada a diferentes etapas del análisis:
-
-- **`Alga y Beta Diversidad en R/`**: Cálculo de diversidad alfa y beta para las comunidades microbianas asociadas.
-- **`Alineamiento/`**: Alineamiento múltiple de secuencias de enzimas y genes degradadores.
-- **`Análisis ecológico/`**: Relación entre microorganismos, ambientes de aislamiento y condiciones físico-químicas.
-- **`Control de calidad/`**: Scripts para filtrado y evaluación de calidad del dataset metagenómico/genómico.
-- **`Filtrado y Clasificación/`**: Limpieza de datos, normalización y clasificación taxonómica/funcional.
-- **`Predicción y Análisis de redes funcionales en R/`**: Modelos de machine learning para capacidad degradativa.
-- **`Red de Co-ocurrencia/`**: Visualización de redes microbio-enzima-plástico mediante co-ocurrencia.
+| Carpeta/Archivo                          | Descripción                                                                 |
+|------------------------------------------|-----------------------------------------------------------------------------|
+| `Alga y Beta Diversidad en R/`           | Cálculo de métricas de diversidad microbiana (Shannon, Simpson, etc.)      |
+| `Alineamiento/`                          | Alineamiento múltiple de secuencias de enzimas degradadoras                |
+| `Análisis ecológico/`                    | Asociaciones entre microorganismos, enzimas y ambientes de aislamiento     |
+| `Control de calidad/`                    | Limpieza y depuración de datasets metagenómicos                            |
+| `Filtrado y Clasificación/`              | Clasificación taxonómica y funcional de genes y microorganismos            |
+| `Predicción y Análisis de redes funcionales en R/` | Modelado predictivo con Random Forest y redes funcionales                 |
+| `Red de Co-ocurrencia/`                  | Visualización de redes microbio-enzima-plástico                            |
+| `README.md`                              | Este archivo                                                               |
 
 ---
 
-##  Herramientas utilizadas
+##  Herramientas y tecnologías utilizadas
 
-- **Lenguaje principal**: R  y Python
-- **Bibliotecas clave**:
-  - `phyloseq`, `vegan` – Análisis de diversidad microbiana
-  - `Biostrings`, `DECIPHER` – Alineamientos y análisis de secuencias
-  - `ggraph`, `igraph` – Visualización de redes
-  - `randomForest`, `caret` – Modelado predictivo
-- **Datos**: Bases de datos públicas (Plastic DB)
+- **Lenguaje principal**: R
+- **Librerías clave**:
+  - `phyloseq`, `vegan` – análisis ecológico
+  - `Biostrings`, `DECIPHER` – alineamiento y filogenia
+  - `randomForest`, `caret`, `e1071` – machine learning
+  - `igraph`, `ggraph` – redes de co-ocurrencia
+
+---
+
+## Resultados esperados
+- Enzimas claves como PETasas, laccasas y cutinasas detectadas
+- Árboles filogenéticos de enzimas y especies degradadoras
+- Clusters microbianos por ambiente y tipo de polímero
+- Red microbio-plástico-enzima
+- Modelo de clasificación de capacidad degradativa (Random Forest)
 
