@@ -18,7 +18,7 @@ print("Filas tras filtrar por plástico:", len(df_filtered))
 df_filtered = df_filtered.drop_duplicates(subset=['Microorganism'])
 print("Filas después de eliminar duplicados:", len(df_filtered))
 
-# Clasificar microorganismos por grupo taxonómico (evita warning)
+# Clasificar microorganismos por grupo taxonómico 
 df_filtered.loc[:, 'Group'] = df_filtered['lineage'].apply(
     lambda x: 'Fungi' if 'Fungi' in str(x) else ('Bacteria' if 'Bacteria' in str(x) else 'Other')
 )
