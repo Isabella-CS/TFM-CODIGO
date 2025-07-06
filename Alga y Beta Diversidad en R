@@ -56,23 +56,23 @@ ordination <- cmdscale(bray_dist)
 ordination_df <- as.data.frame(ordination)
 ordination_df$Microorganism <- rownames(ordination_df)
 
-# Obtener tipo de plástico más frecuente por microorganismo (incluye PE y PVC)
+# Obtener tipo de plástico más frecuente por microorganismo 
 info_plastico <- datos %>%
   group_by(Microorganism, Plastic) %>%
   tally() %>%
   slice_max(n, n = 1, with_ties = FALSE) %>%  # Elegir el más frecuente
   ungroup()
 
-# Verificar que PE y PVC estén presentes
-print(unique(info_plastico$Plastic))  # <- PE y PVC deben aparecer
+# Verificar presencia de los plásticos
+print(unique(info_plastico$Plastic))  
 
-# Unir la información del plástico
+# Unir la información 
 ordination_df <- left_join(ordination_df, info_plastico, by = "Microorganism")
 
 # Verificar que todos los microorganismos tienen asignado un plástico
 stopifnot(all(!is.na(ordination_df$Plastic)))
 
-# Graficar el MDS con colores por plástico y etiquetas sin solapamiento
+# Graficar el MDS  por plástico y etiquetas 
 ggplot(ordination_df, aes(x = V1, y = V2, color = Plastic)) +
   geom_point(size = 3) +
   geom_text_repel(aes(label = Microorganism),
