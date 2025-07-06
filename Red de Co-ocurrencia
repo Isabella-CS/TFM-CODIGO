@@ -1,10 +1,12 @@
+##RED DE CO-OCURRENCIAS
+
 import networkx as nx
 import matplotlib.pyplot as plt
 
 # Crear grafo no dirigido
 G = nx.Graph()
 
-# Añadir nodos y enlaces: Microorganismo ↔ Enzima
+# Añadir nodos y enlaces: Microorganismo - Enzima
 for _, row in df_filtered.iterrows():
     microbe = row['Microorganism']
     enzyme = row['Enzyme']
@@ -24,6 +26,7 @@ microbes = [n for n, d in G.nodes(data=True) if d['type'] == 'microbe']
 enzymes = [n for n, d in G.nodes(data=True) if d['type'] == 'enzyme']
 plastics = [n for n, d in G.nodes(data=True) if d['type'] == 'plastic']
 
+#Gráfico
 plt.figure(figsize=(16, 12))
 nx.draw_networkx_edges(G, pos, alpha=0.3)
 
