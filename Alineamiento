@@ -4,13 +4,13 @@ from Bio import AlignIO, Phylo
 import os
 import matplotlib.pyplot as plt
 
-# Archivo fasta de secuencias ya guardado (usa el que tengas)
+# Archivo fasta de secuencias 
 fasta_input = r'D:\Mis documentos\Documentos\MAESTRIA\TFM\dataset_filtrado_seq.fasta'
 
 # Archivo de salida para alineamiento
 aligned_output = r'D:\Mis documentos\Documentos\MAESTRIA\TFM\aligned_sequences.aln'
 
-# Archivo para el árbol filogenético (Newick)
+# Archivo para el árbol filogenético 
 tree_output = r'D:\Mis documentos\Documentos\MAESTRIA\TFM\phylo_tree.dnd'
 
 # Ruta a Clustal Omega 
