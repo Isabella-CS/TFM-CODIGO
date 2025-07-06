@@ -1,4 +1,5 @@
 ##PREDICCIÓN
+
 library(randomForest)
 library(caret)
 library(ggplot2)
@@ -11,7 +12,7 @@ print(df)
 # Asegúrate de que Plastic sea factor
 df$Plastic <- as.factor(df$Plastic)
 
-# Dividir en train/test
+# Dividir en train/test (80 -20)
 set.seed(42)
 trainIndex <- createDataPartition(df$Plastic, p = .8, list = FALSE)
 trainData <- df[trainIndex, ]
