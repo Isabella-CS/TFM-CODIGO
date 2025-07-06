@@ -15,8 +15,8 @@ from sklearn.manifold import TSNE
 
 # CONFIGURAR VARIABLES Y DATOS
 
-features = ['Temperature', 'Environment']  # Añade más si tienes
-group_col = 'Enzyme'                       # O 'Group', según tu variable
+features = ['Temperature', 'Environment']  # variables
+group_col = 'Enzyme'                       
 name_col = 'Microorganism'
 
 # Verificar columnas
@@ -54,7 +54,7 @@ plt.show()
 
 # Distribución de enzimas por ambiente
 env_enz_counts = df_seq.groupby(['Environment', 'Enzyme']).size().unstack().fillna(0)
-
+#Gráfico
 plt.figure(figsize=(12, 6))
 env_enz_counts.plot(kind='bar', stacked=True, colormap='viridis', edgecolor='black')
 plt.title('Distribución de Enzimas por Ambiente de Aislamiento', pad=20)
